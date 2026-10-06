@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NorthStar TMS</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+    font-family:Inter,Arial,sans-serif;
+    background:#f4f6f9;
+    color:#172033;
+}
+button,input,select{font:inherit}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:250px;
+    background:#101827;
+    color:#fff;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    padding:22px 14px;
+    overflow-y:auto;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:8px 12px 30px;
+}
+
+.logo-icon{
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    background:#2563eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
+.logo strong{
+    font-size:17px;
+}
+
+.logo small{
+    display:block;
+    color:#718096;
+    font-size:9px;
+    letter-spacing:2px;
+    margin-top:3px;
+}
+
+.menu-title{
+    color:#657084;
+    font-size:10px;
+    font-weight:bold;
+    letter-spacing:1.5px;
+    padding:12px 13px 7px;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    color:#9ca8ba;
+    padding:11px 13px;
+    border-radius:8px;
+    text-align:left;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:13px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:#1d4ed8;
+    color:#fff;
+}
+
+.nav-icon{
+    width:20px;
+    text-align:center;
+}
+
+.badge{
+    margin-left:auto;
+    background:#ef4444;
+    color:#fff;
+    font-size:9px;
+    padding:3px 7px;
+    border-radius:10px;
+}
+
+.sidebar-bottom{
+    position:absolute;
+    left:14px;
+    right:14px;
+    bottom:18px;
+    border-top:1px solid #202b3d;
+    padding-top:15px;
+}
+
+.company{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    padding:8px;
+}
+
+.company-avatar{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    background:#334155;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* MAIN */
+.main{
+    margin-left:250px;
+    width:calc(100% - 250px);
+}
+
+.topbar{
+    height:70px;
+    background:#fff;
+    border-bottom:1px solid #e5e9ef;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+}
+
+.page-title h1{
+    font-size:20px;
+}
+
+.page-title p{
+    color:#8490a3;
+    font-size:11px;
+    margin-top:3px;
+}
+
+.top-actions{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.search-top{
+    width:230px;
+    padding:10px 13px;
+    border:1px solid #dfe4eb;
+    border-radius:8px;
+    outline:none;
+    font-size:12px;
+}
+
+.notification{
+    position:relative;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.notification i{
+    position:absolute;
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#ef4444;
+    top:0;
+    right:0;
+}
+
+.admin{
+    display:flex;
+    gap:9px;
+    align-items:center;
+}
+
+.admin-avatar{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#dbeafe;
+    color:#1d4ed8;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:12px;
+}
+
+.admin span{
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* CONTENT */
+.content{
+    padding:25px 30px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+/* BUTTON */
+.btn{
+    border:0;
+    border-radius:7px;
+    padding:9px 14px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.btn-blue{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-blue:hover{
+    background:#1d4ed8;
+}
+
+.btn-light{
+    background:#fff;
+    border:1px solid #dfe4eb;
+}
+
+.btn-red{
+    background:#fee2e2;
+    color:#dc2626;
+}
+
+/* KPI */
+.kpis{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.kpi{
+    background:#fff;
+    border:1px solid #e6eaf0;
+    border-radius:10px;
+    padding:18px;
+}
+
+.kpi-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.kpi-label{
+    color:#7b8799;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.kpi-icon{
+    width:34px;
+    height:34px;
+    border-radius:8px;
+    background:#eef4ff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.kpi-number{
+    font-size:24px;
+    font-weight:800;
+    margin-top:12px;
+}
+
+.kpi-bottom{
+    margin-top:8px;
+    font-size:10px;
+}
+
+.up{color:#16a34a}
+.down{color:#dc2626}
+.muted{color:#8b95a5}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:18px;
+    margin-bottom:20px;
+}
+
+.box{
+    background:#fff;
+    border:1px solid #e6eaf0;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.box-header{
+    padding:16px 18px;
+    border-bottom:1px solid #edf0f4;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.box-header h3{
+    font-size:14px;
+}
+
+.box-header span{
+    font-size:11px;
+    color:#7d899a;
+}
+
+/* CHART */
+.chart{
+    height:240px;
+    padding:20px;
+    display:flex;
+    align-items:end;
+    gap:13px;
+}
+
+.bar-wrap{
+    flex:1;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:end;
+    align-items:center;
+    gap:7px;
+}
+
+.bar{
+    width:100%;
+    max-width:42px;
+    background:#2563eb;
+    border-radius:5px 5px 0 0;
+}
+
+.bar-label{
+    font-size:9px;
+    color:#8792a3;
+}
+
+/* MAP */
+.map{
+    height:300px;
+    background:
+      linear-gradient(30deg,transparent 48%,#dfe7ef 49%,#dfe7ef 51%,transparent 52%),
+      linear-gradient(150deg,transparent 48%,#dfe7ef 49%,#dfe7ef 51%,transparent 52%),
+      #f0f4f8;
+    background-size:90px 90px;
+    position:relative;
+    overflow:hidden;
+}
+
+.map:before{
+    content:"";
+    position:absolute;
+    width:420px;
+    height:150px;
+    border:3px solid #b9c7d8;
+    border-radius:50%;
+    left:100px;
+    top:60px;
+    transform:rotate(-15deg);
+}
+
+.route-line-map{
+    position:absolute;
+    width:65%;
+    height:4px;
+    background:#2563eb;
+    left:17%;
+    top:48%;
+    transform:rotate(-8deg);
+    box-shadow:0 0 0 4px rgba(37,99,235,.12);
+}
+
+.city{
+    position:absolute;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.city-dot{
+    width:11px;
+    height:11px;
+    border:3px solid #fff;
+    border-radius:50%;
+    background:#2563eb;
+    box-shadow:0 0 0 2px #2563eb;
+    margin-bottom:5px;
+}
+
+.chicago{left:30%;top:34%}
+.memphis{left:53%;top:58%}
+.dallas{left:67%;top:69%}
+.losangeles{left:15%;top:73%}
+.newyork{right:11%;top:30%}
+
+/* STATUS */
+.status{
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:9px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.transit{background:#dbeafe;color:#1d4ed8}
+.delivered{background:#dcfce7;color:#15803d}
+.pending{background:#fef3c7;color:#a16207}
+.late{background:#fee2e2;color:#b91c1c}
+
+/* TABLE */
+.table-box{
+    background:#fff;
+    border:1px solid #e5e9ef;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.table-toolbar{
+    padding:16px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.toolbar-left{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.toolbar-left h3{
+    font-size:15px;
+}
+
+.table-search{
+    width:230px;
+    padding:9px 11px;
+    border:1px solid #dce2ea;
+    border-radius:7px;
+    outline:none;
+    font-size:11px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#f8fafc;
+    color:#7b8798;
+    font-size:9px;
+    text-align:left;
+    padding:12px 15px;
+    border-top:1px solid #edf0f4;
+    border-bottom:1px solid #edf0f4;
+    text-transform:uppercase;
+}
+
+td{
+    padding:13px 15px;
+    border-bottom:1px solid #edf0f4;
+    font-size:11px;
+}
+
+tr:hover td{
+    background:#fbfcfe;
+}
+
+.load-id{
+    color:#2563eb;
+    font-weight:bold;
+}
+
+.route-text{
+    font-weight:bold;
+}
+
+.route-sub{
+    color:#8a95a5;
+    margin-top:3px;
+    font-size:9px;
+}
+
+/* DRIVER CARDS */
+.driver-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.driver-card{
+    background:#fff;
+    border:1px solid #e4e8ee;
+    border-radius:10px;
+    padding:18px;
+}
+
+.driver-head{
+    display:flex;
+    gap:11px;
+    align-items:center;
+}
+
+.driver-avatar{
+    width:42px;
+    height:42px;
+    background:#e8eef8;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+    color:#1d4ed8;
+}
+
+.driver-name{
+    font-size:13px;
+    font-weight:bold;
+}
+
+.driver-role{
+    color:#8a95a5;
+    font-size:9px;
+    margin-top:3px;
+}
+
+.driver-info{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.info-item label{
+    display:block;
+    color:#8994a5;
+    font-size:8px;
+    text-transform:uppercase;
+    margin-bottom:4px;
+}
+
+.info-item b{
+    font-size:11px;
+}
+
+.progress{
+    height:5px;
+    background:#edf1f5;
+    border-radius:5px;
+    margin-top:12px;
+    overflow:hidden;
+}
+
+.progress div{
+    height:100%;
+    background:#2563eb;
+}
+
+/* FLEET */
+.fleet-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.truck{
+    background:#fff;
+    border:1px solid #e5e9ef;
+    border-radius:10px;
+    padding:18px;
+}
+
+.truck-icon{
+    height:110px;
+    background:#f2f5f9;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:55px;
+}
+
+.truck h3{
+    margin-top:13px;
+    font-size:14px;
+}
+
+.truck p{
+    font-size:10px;
+    color:#8a95a5;
+    margin-top:4px;
+}
+
+.truck-meta{
+    display:flex;
+    justify-content:space-between;
+    margin-top:15px;
+    font-size:10px;
+}
+
+/* FINANCE */
+.finance-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.finance-card{
+    background:#fff;
+    border:1px solid #e5e9ef;
+    border-radius:10px;
+    padding:20px;
+}
+
+.finance-card p{
+    color:#8792a2;
+    font-size:10px;
+}
+
+.finance-card h2{
+    margin-top:8px;
+    font-size:25px;
+}
+
+.finance-card small{
+    display:block;
+    margin-top:8px;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(8,15,28,.55);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:570px;
+    max-width:94%;
+    background:#fff;
+    border-radius:12px;
+    padding:24px;
+}
+
+.modal-box h2{
+    font-size:18px;
+    margin-bottom:20px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.form-group label{
+    font-size:10px;
+    font-weight:bold;
+    color:#667286;
+}
+
+.form-group input,
+.form-group select{
+    padding:10px;
+    border:1px solid #dce2ea;
+    border-radius:7px;
+    outline:none;
+    font-size:11px;
+}
+
+.modal-footer{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .driver-grid,.fleet-grid{grid-template-columns:repeat(2,1fr)}
+    .grid{grid-template-columns:1fr}
+}
+
+@media(max-width:800px){
+    .sidebar{
+        width:70px;
+        padding:15px 8px;
+    }
+
+    .logo strong,
+    .logo small,
+    .menu-title,
+    .nav button span:not(.nav-icon),
+    .badge,
+    .company span{
+        display:none;
+    }
+
+    .logo{
+        justify-content:center;
+        padding-bottom:20px;
+    }
+
+    .nav button{
+        justify-content:center;
+    }
+
+    .sidebar-bottom{
+        display:none;
+    }
+
+    .main{
+        margin-left:70px;
+        width:calc(100% - 70px);
+    }
+
+    .search-top{
+        display:none;
+    }
+
+    .content{
+        padding:15px;
+    }
+
+    .driver-grid,.fleet-grid,.finance-grid{
+        grid-template-columns:1fr;
+    }
+
+    .table-box{
+        overflow-x:auto;
+    }
+
+    table{
+        min-width:900px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logo-icon">🚛</div>
+        <div>
+            <strong>NORTHSTAR</strong>
+            <small>LOGISTICS TMS</small>
+        </div>
+    </div>
+
+    <div class="menu-title">OPERATIONS</div>
+
+    <div class="nav">
+
+        <button class="active" onclick="showPage('dashboard',this)">
+            <span class="nav-icon">▦</span>
+            <span>Dashboard</span>
+        </button>
+
+        <button onclick="showPage('dispatch',this)">
+            <span class="nav-icon">◈</span>
+            <span>Dispatch Board</span>
+            <b class="badge">12</b>
+        </button>
+
+        <button onclick="showPage('loads',this)">
+            <span class="nav-icon">▣</span>
+            <span>Loads</span>
+        </button>
+
+        <button onclick="showPage('drivers',this)">
+            <span class="nav-icon">♙</span>
+            <span>Drivers</span>
+        </button>
+
+        <button onclick="showPage('fleet',this)">
+            <span class="nav-icon">🚛</span>
+            <span>Fleet</span>
+        </button>
+
+    </div>
+
+    <div class="menu-title">MANAGEMENT</div>
+
+    <div class="nav">
+
+        <button onclick="showPage('customers',this)">
+            <span class="nav-icon">◎</span>
+            <span>Customers</span>
+        </button>
+
+        <button onclick="showPage('finance',this)">
+            <span class="nav-icon">$</span>
+            <span>Finance</span>
+        </button>
+
+        <button onclick="showPage('documents',this)">
+            <span class="nav-icon">▤</span>
+            <span>Documents</span>
+        </button>
+
+        <button onclick="showPage('reports',this)">
+            <span class="nav-icon">◫</span>
+            <span>Reports</span>
+        </button>
+
+    </div>
+
+    <div class="menu-title">SYSTEM</div>
+
+    <div class="nav">
+
+        <button>
+            <span class="nav-icon">⚙</span>
+            <span>Settings</span>
+        </button>
+
+        <button>
+            <span class="nav-icon">?</span>
+            <span>Support</span>
+        </button>
+
+    </div>
+
+    <div class="sidebar-bottom">
+        <div class="company">
+            <div class="company-avatar">NS</div>
+            <div>
+                <b style="font-size:11px">NorthStar LLC</b>
+                <div style="font-size:9px;color:#718096">Administrator</div>
+            </div>
+        </div>
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+<header class="topbar">
+
+    <div class="page-title">
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageSubtitle">Transportation Management System</p>
+    </div>
+
+    <div class="top-actions">
+
+        <input
+            class="search-top"
+            placeholder="Search loads, drivers, trucks..."
+            onkeyup="globalSearch(this.value)"
+        >
+
+        <div class="notification">
+            🔔
+            <i></i>
+        </div>
+
+        <div class="admin">
+            <div class="admin-avatar">SC</div>
+            <span>Sarah Carter</span>
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="content">
+
+
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+
+    <div class="kpis">
+
+        <div class="kpi">
+            <div class="kpi-top">
+                <span class="kpi-label">ACTIVE LOADS</span>
+                <div class="kpi-icon">📦</div>
+            </div>
+            <div class="kpi-number">48</div>
+            <div class="kpi-bottom up">↑ 12.4% <span class="muted">vs last week</span></div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-top">
+                <span class="kpi-label">REVENUE</span>
+                <div class="kpi-icon">$</div>
+            </div>
+            <div class="kpi-number">$284.6K</div>
+            <div class="kpi-bottom up">↑ 8.7% <span class="muted">vs last month</span></div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-top">
+                <span class="kpi-label">AVAILABLE TRUCKS</span>
+                <div class="kpi-icon">🚛</div>
+            </div>
+            <div class="kpi-number">17</div>
+            <div class="kpi-bottom"><span class="muted">of 64 total fleet</span></div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-top">
+                <span class="kpi-label">ON-TIME RATE</span>
+                <div class="kpi-icon">✓</div>
+            </div>
+            <div class="kpi-number">94.8%</div>
+            <div class="kpi-bottom up">↑ 2.1% <span class="muted">this month</span></div>
+        </div>
+
+    </div>
+
+
+    <div class="grid">
+
+        <div class="box">
+
+            <div class="box-header">
+                <h3>Revenue Overview</h3>
+                <span>Last 7 months ▾</span>
+            </div>
+
+            <div class="chart">
+
+                <div class="bar-wrap">
+                    <div class="bar" style="height:38%"></div>
+                    <span class="bar-label">APR</span>
+                </div>
+
+                <div class="bar-wrap">
+                    <div class="bar" style="height:51%"></div>
+                    <span class="bar-label">MAY</span>
+                </div>
+
+                <div class="bar-wrap">
+                    <div class="bar" style="height:44%"></div>
+                    <span class="bar-label">JUN</span>
+                </div>
+
+                <div class="bar-wrap">
+                    <div class="bar" style="height:65%"></div>
+                    <span class="bar-label">JUL</span>
+                </div>
+
+                <div class="bar-wrap">
+                    <div class="bar" style="height:59%"></div>
+                    <span class="bar-label">AUG</span>
+                </div>
+
+                <div class="bar-wrap">
+                    <div class="bar" style="height:77%"></div>
+                    <span class="bar-label">SEP</span>
+                </div>
+
+                <div class="bar-wrap">
+                    <div class="bar" style="height:91%"></div>
+                    <span class="bar-label">OCT</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="box">
+
+            <div class="box-header">
+                <h3>Fleet Tracking</h3>
+                <span>Live</span>
+            </div>
+
+            <div class="map">
+
+                <div class="route-line-map"></div>
+
+                <div class="city chicago">
+                    <div class="city-dot"></div>
+                    Chicago
+                </div>
+
+                <div class="city memphis">
+                    <div class="city-dot"></div>
+                    Memphis
+                </div>
+
+                <div class="city dallas">
+                    <div class="city-dot"></div>
+                    Dallas
+                </div>
+
+                <div class="city losangeles">
+                    <div class="city-dot"></div>
+                    L.A.
+                </div>
+
+                <div class="city newyork">
+                    <div class="city-dot"></div>
+                    New York
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="box">
+
+        <div class="box-header">
+            <h3>Recent Loads</h3>
+            <span>View all →</span>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Load</th>
+                    <th>Route</th>
+                    <th>Customer</th>
+                    <th>Driver</th>
+                    <th>Rate</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td class="load-id">#NS-48291</td>
+                    <td>
+                        <div class="route-text">Chicago, IL → Dallas, TX</div>
+                        <div class="route-sub">918 mi</div>
+                    </td>
+                    <td>Walmart Logistics</td>
+                    <td>Michael Johnson</td>
+                    <td><b>$4,850</b></td>
+                    <td><span class="status transit">IN TRANSIT</span></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">#NS-48290</td>
+                    <td>
+                        <div class="route-text">Atlanta, GA → Miami, FL</div>
+                        <div class="route-sub">662 mi</div>
+                    </td>
+                    <td>Target Supply</td>
+                    <td>Robert Williams</td>
+                    <td><b>$3,240</b></td>
+                    <td><span class="status delivered">DELIVERED</span></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">#NS-48289</td>
+                    <td>
+                        <div class="route-text">Los Angeles, CA → Phoenix, AZ</div>
+                        <div class="route-sub">372 mi</div>
+                    </td>
+                    <td>Amazon Freight</td>
+                    <td>James Miller</td>
+                    <td><b>$2,180</b></td>
+                    <td><span class="status pending">PICKUP</span></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">#NS-48288</td>
+                    <td>
+                        <div class="route-text">Newark, NJ → Boston, MA</div>
+                        <div class="route-sub">218 mi</div>
+                    </td>
+                    <td>Home Depot</td>
+                    <td>Daniel Brown</td>
+                    <td><b>$1,650</b></td>
+                    <td><span class="status late">DELAYED</span></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- DISPATCH -->
+<section class="page" id="dispatch">
+
+    <div class="table-box">
+
+        <div class="table-toolbar">
+
+            <div class="toolbar-left">
+                <h3>Dispatch Board</h3>
+            </div>
+
+            <div>
+                <button class="btn btn-light">Today ▾</button>
+                <button class="btn btn-blue" onclick="openModal('loadModal')">+ New Load</button>
+            </div>
+
+        </div>
+
+        <table id="dispatchTable">
+
+            <thead>
+                <tr>
+                    <th>LOAD</th>
+                    <th>PICKUP</th>
+                    <th>DELIVERY</th>
+                    <th>DRIVER</th>
+                    <th>TRUCK</th>
+                    <th>RATE</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td class="load-id">#48291</td>
+                    <td>Chicago, IL<br><span class="muted">Oct 06 • 08:00 AM</span></td>
+                    <td>Dallas, TX<br><span class="muted">Oct 08 • 02:00 PM</span></td>
+                    <td>Michael Johnson</td>
+                    <td>NS-1842</td>
+                    <td>$4,850</td>
+                    <td><span class="status transit">IN TRANSIT</span></td>
+                    <td><button class="btn btn-light">View</button></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">#48290</td>
+                    <td>Atlanta, GA<br><span class="muted">Oct 06 • 10:00 AM</span></td>
+                    <td>Miami, FL<br><span class="muted">Oct 07 • 06:00 PM</span></td>
+                    <td>Robert Williams</td>
+                    <td>NS-2014</td>
+                    <td>$3,240</td>
+                    <td><span class="status delivered">DELIVERED</span></td>
+                    <td><button class="btn btn-light">View</button></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">#48289</td>
+                    <td>Los Angeles, CA<br><span class="muted">Oct 06 • 01:00 PM</span></td>
+                    <td>Phoenix, AZ<br><span class="muted">Oct 07 • 08:00 AM</span></td>
+                    <td>James Miller</td>
+                    <td>NS-1771</td>
+                    <td>$2,180</td>
+                    <td><span class="status pending">PICKUP</span></td>
+                    <td><button class="btn btn-light">View</button></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">#48288</td>
+                    <td>Newark, NJ<br><span class="muted">Oct 06 • 04:00 PM</span></td>
+                    <td>Boston, MA<br><span class="muted">Oct 07 • 10:00 AM</span></td>
+                    <td>Daniel Brown</td>
+                    <td>NS-1908</td>
+                    <td>$1,650</td>
+                    <td><span class="status late">DELAYED</span></td>
+                    <td><button class="btn btn-light">View</button></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- LOADS -->
+<section class="page" id="loads">
+
+    <div class="table-box">
+
+        <div class="table-toolbar">
+
+            <div class="toolbar-left">
+                <h3>Load Management</h3>
+            </div>
+
+            <div>
+                <input
+                    class="table-search"
+                    placeholder="Search loads..."
+                    onkeyup="searchTable('loadsTable',this.value)"
+                >
+
+                <button class="btn btn-blue" onclick="openModal('loadModal')">
+                    + New Load
+                </button>
+            </div>
+
+        </div>
+
+        <table id="loadsTable">
+
+            <thead>
+                <tr>
+                    <th>LOAD ID</th>
+                    <th>ORIGIN</th>
+                    <th>DESTINATION</th>
+                    <th>CUSTOMER</th>
+                    <th>MILES</th>
+                    <th>RATE</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td class="load-id">NS-48291</td>
+                    <td>Chicago, IL</td>
+                    <td>Dallas, TX</td>
+                    <td>Walmart Logistics</td>
+                    <td>918</td>
+                    <td>$4,850</td>
+                    <td><span class="status transit">IN TRANSIT</span></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">NS-48290</td>
+                    <td>Atlanta, GA</td>
+                    <td>Miami, FL</td>
+                    <td>Target Supply</td>
+                    <td>662</td>
+                    <td>$3,240</td>
+                    <td><span class="status delivered">DELIVERED</span></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">NS-48289</td>
+                    <td>Los Angeles, CA</td>
+                    <td>Phoenix, AZ</td>
+                    <td>Amazon Freight</td>
+                    <td>372</td>
+                    <td>$2,180</td>
+                    <td><span class="status pending">PICKUP</span></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">NS-48288</td>
+                    <td>Newark, NJ</td>
+                    <td>Boston, MA</td>
+                    <td>Home Depot</td>
+                    <td>218</td>
+                    <td>$1,650</td>
+                    <td><span class="status late">DELAYED</span></td>
+                </tr>
+
+                <tr>
+                    <td class="load-id">NS-48287</td>
+                    <td>Houston, TX</td>
+                    <td>Denver, CO</td>
+                    <td>FedEx Freight</td>
+                    <td>1,030</td>
+                    <td>$5,420</td>
+                    <td><span class="status transit">IN TRANSIT</span></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- DRIVERS -->
+<section class="page" id="drivers">
+
+    <div class="table-toolbar" style="padding:0 0 18px">
+
+        <h3>Driver Management</h3>
+
+        <button class="btn btn-blue">+ Add Driver</button>
+
+    </div>
+
+    <div class="driver-grid">
+
+        <div class="driver-card">
+
+            <div class="driver-head">
+                <div class="driver-avatar">MJ</div>
+                <div>
+                    <div class="driver-name">Michael Johnson</div>
+                    <div class="driver-role">OTR Driver • CDL-A</div>
+                </div>
+            </div>
+
+            <div class="driver-info">
+                <div class="info-item">
+                    <label>Truck</label>
+                    <b>NS-1842</b>
+                </div>
+
+                <div class="info-item">
+                    <label>Status</label>
+                    <b class="up">On Duty</b>
+                </div>
+
+                <div class="info-item">
+                    <label>HOS Left</label>
+                    <b>06h 42m</b>
+                </div>
+
+                <div class="info-item">
+                    <label>Current</label>
+                    <b>Memphis, TN</b>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div style="width:72%"></div>
+            </div>
+
+        </div>
+
+
+        <div class="driver-card">
+
+            <div class="driver-head">
+                <div class="driver-avatar">RW</div>
+                <div>
+                    <div class="driver-name">Robert Williams</div>
+                    <div class="driver-role">OTR Driver • CDL-A</div>
+                </div>
+            </div>
+
+            <div class="driver-info">
+                <div class="info-item">
+                    <label>Truck</label>
+                    <b>NS-2014</b>
+                </div>
+
+                <div class="info-item">
+                    <label>Status</label>
+                    <b class="up">Available</b>
+                </div>
+
+                <div class="info-item">
+                    <label>HOS Left</label>
+                    <b>10h 18m</b>
+                </div>
+
+                <div class="info-item">
+                    <label>Current</label>
+                    <b>Atlanta, GA</b>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div style="width:48%"></div>
+            </div>
+
+        </div>
+
+
+        <div class="driver-card">
+
+            <div class="driver-head">
+                <div class="driver-avatar">JM</div>
+                <div>
+                    <div class="driver-name">James Miller</div>
+                    <div class="driver-role">OTR Driver • CDL-A</div>
+                </div>
+            </div>
+
+            <div class="driver-info">
+                <div class="info-item">
+                    <label>Truck</label>
+                    <b>NS-1771</b>
+                </div>
+
+                <div class="info-item">
+                    <label>Status</label>
+                    <b class="up">On Duty</b>
+                </div>
+
+                <div class="info-item">
+                    <label>HOS Left</label>
+                    <b>04h 27m</b>
+                </div>
+
+                <div class="info-item">
+                    <label>Current</label>
+                    <b>Flagstaff, AZ</b>
+                </div>
+            </div>
+
+            <div class="progress">
+                <div style="width:82%"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FLEET -->
+<section class="page" id="fleet">
+
+    <div class="table-toolbar" style="padding:0 0 18px">
+        <h3>Fleet Management</h3>
+        <button class="btn btn-blue">+ Add Truck</button>
+    </div>
+
+    <div class="fleet-grid">
+
+        <div class="truck">
+            <div class="truck-icon">🚛</div>
+            <h3>Freightliner Cascadia</h3>
+            <p>Unit #NS-1842 • 2023</p>
+
+            <div class="truck-meta">
+                <span>890,241 mi</span>
+                <span class="status transit">IN USE</span>
+            </div>
+        </div>
+
+        <div class="truck">
+            <div class="truck-icon">🚚</div>
+            <h3>Peterbilt 579</h3>
+            <p>Unit #NS-2014 • 2022</p>
+
+            <div class="truck-meta">
+                <span>642,820 mi</span>
+                <span class="status delivered">AVAILABLE</span>
+            </div>
+        </div>
+
+        <div class="truck">
+            <div class="truck-icon">🚛</div>
+            <h3>Kenworth T680</h3>
+            <p>Unit #NS-1771 • 2024</p>
+
+            <div class="truck-meta">
+                <span>421,650 mi</span>
+                <span class="status transit">IN USE</span>
+            </div>
+        </div>
+
+        <div class="truck">
+            <div class="truck-icon">🚚</div>
+            <h3>Volvo VNL</h3>
+            <p>Unit #NS-1908 • 2021</p>
+
+            <div class="truck-meta">
+                <span>781,430 mi</span>
+                <span class="status late">SERVICE</span>
+            </div>
+        </div>
+
+        <div class="truck">
+            <div class="truck-icon">🚛</div>
+            <h3>Freightliner Cascadia</h3>
+            <p>Unit #NS-2091 • 2024</p>
+
+            <div class="truck-meta">
+                <span>218,430 mi</span>
+                <span class="status delivered">AVAILABLE</span>
+            </div>
+        </div>
+
+        <div class="truck">
+            <div class="truck-icon">🚚</div>
+            <h3>International LT</h3>
+            <p>Unit #NS-1652 • 2020</p>
+
+            <div class="truck-meta">
+                <span>1,021,442 mi</span>
+                <span class="status transit">IN USE</span>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CUSTOMERS -->
+<section class="page" id="customers">
+
+    <div class="table-box">
+
+        <div class="table-toolbar">
+
+            <h3>Customers</h3>
+
+            <button class="btn btn-blue">+ Add Customer</button>
+
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>COMPANY</th>
+                    <th>CONTACT</th>
+                    <th>PHONE</th>
+                    <th>ACTIVE LOADS</th>
+                    <th>TOTAL REVENUE</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><b>Walmart Logistics</b></td>
+                    <td>David Anderson</td>
+                    <td>+1 501-273-4000</td>
+                    <td>12</td>
+                    <td>$84,240</td>
+                    <td><span class="status delivered">ACTIVE</span></td>
+                </tr>
+
+                <tr>
+                    <td><b>Amazon Freight</b></td>
+                    <td>Chris Taylor</td>
+                    <td>+1 206-266-1000</td>
+                    <td>8</td>
+                    <td>$63,180</td>
+                    <td><span class="status delivered">ACTIVE</span></td>
+                </tr>
+
+                <tr>
+                    <td><b>Target Supply</b></td>
+                    <td>Mark Wilson</td>
+                    <td>+1 612-304-6073</td>
+                    <td>6</td>
+                    <td>$42,670</td>
+                    <td><span class="status delivered">ACTIVE</span></td>
+                </tr>
+
+                <tr>
+                    <td><b>Home Depot</b></td>
+                    <td>Brian Davis</td>
+                    <td>+1 770-433-8211</td>
+                    <td>4</td>
+                    <td>$31,450</td>
+                    <td><span class="status delivered">ACTIVE</span></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- FINANCE -->
+<section class="page" id="finance">
+
+    <div class="finance-grid">
+
+        <div class="finance-card">
+            <p>TOTAL REVENUE</p>
+            <h2>$284,650</h2>
+            <small class="up">↑ 8.7% this month</small>
+        </div>
+
+        <div class="finance-card">
+            <p>TOTAL EXPENSES</p>
+            <h2>$176,420</h2>
+            <small class="down">↑ 3.2% this month</small>
+        </div>
+
+        <div class="finance-card">
+            <p>NET PROFIT</p>
+            <h2>$108,230</h2>
+            <small class="up">↑ 14.1% this month</small>
+        </div>
+
+    </div>
+
+    <br>
+
+    <div class="box">
+
+        <div class="box-header">
+            <h3>Financial Breakdown</h3>
+            <span>October 2026</span>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>CATEGORY</th>
+                    <th>AMOUNT</th>
+                    <th>SHARE</th>
+                    <th>CHANGE</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Fuel</td>
+                    <td>$31,840</td>
+                    <td>18.0%</td>
+                    <td class="down">+4.2%</td>
+                </tr>
+
+                <tr>
+                    <td>Driver Payroll</td>
+                    <td>$48,200</td>
+                    <td>27.3%</td>
+                    <td class="down">+2.8%</td>
+                </tr>
+
+                <tr>
+                    <td>Maintenance</td>
+                    <td>$18,450</td>
+                    <td>10.5%</td>
+                    <td class="up">-1.4%</td>
+                </tr>
+
+                <tr>
+                    <td>Insurance</td>
+                    <td>$12,900</td>
+                    <td>7.3%</td>
+                    <td class="up">-0.8%</td>
+                </tr>
+
+                <tr>
+                    <td>Other</td>
+                    <td>$65,030</td>
+                    <td>36.9%</td>
+                    <td class="up">-2.1%</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- DOCUMENTS -->
+<section class="page" id="documents">
+
+    <div class="table-box">
+
+        <div class="table-toolbar">
+
+            <h3>Documents & Compliance</h3>
+
+            <button class="btn btn-blue">+ Upload Document</button>
+
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>DOCUMENT</th>
+                    <th>TYPE</th>
+                    <th>ENTITY</th>
+                    <th>EXPIRATION</th>
+                    <th>STATUS</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><b>CDL - Michael Johnson</b></td>
+                    <td>Driver License</td>
+                    <td>Michael Johnson</td>
+                    <td>Dec 18, 2027</td>
+                    <td><span class="status delivered">VALID</span></td>
+                </tr>
+
+                <tr>
+                    <td><b>Insurance - NS Fleet</b></td>
+                    <td>Insurance</td>
+                    <td>NorthStar LLC</td>
+                    <td>Jan 04, 2027</td>
+                    <td><span class="status delivered">VALID</span></td>
+                </tr>
+
+                <tr>
+                    <td><b>Medical Card - James Miller</b></td>
+                    <td>Medical</td>
+                    <td>James Miller</td>
+                    <td>Oct 28, 2026</td>
+                    <td><span class="status pending">EXPIRING</span></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- REPORTS -->
+<section class="page" id="reports">
+
+    <div class="kpis">
+
+        <div class="kpi">
+            <div class="kpi-label">TOTAL MILES</div>
+            <div class="kpi-number">118,420</div>
+            <div class="kpi-bottom up">↑ 6.2%</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">REVENUE / MILE</div>
+            <div class="kpi-number">$2.41</div>
+            <div class="kpi-bottom up">↑ $0.12</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">DEADHEAD</div>
+            <div class="kpi-number">7.8%</div>
+            <div class="kpi-bottom up">↓ 1.3%</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">UTILIZATION</div>
+            <div class="kpi-number">87.4%</div>
+            <div class="kpi-bottom up">↑ 4.5%</div>
+        </div>
+
+    </div>
+
+    <div class="box">
+
+        <div class="box-header">
+            <h3>Performance Report</h3>
+            <span>October 2026</span>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>METRIC</th>
+                    <th>THIS MONTH</th>
+                    <th>LAST MONTH</th>
+                    <th>CHANGE</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Total Loads</td>
+                    <td>482</td>
+                    <td>431</td>
+                    <td class="up">+11.8%</td>
+                </tr>
+
+                <tr>
+                    <td>Delivered Loads</td>
+                    <td>451</td>
+                    <td>402</td>
+                    <td class="up">+12.2%</td>
+                </tr>
+
+                <tr>
+                    <td>On-Time Delivery</td>
+                    <td>94.8%</td>
+                    <td>92.7%</td>
+                    <td class="up">+2.1%</td>
+                </tr>
+
+                <tr>
+                    <td>Average Rate</td>
+                    <td>$3,241</td>
+                    <td>$3,084</td>
+                    <td class="up">+5.1%</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+</div>
+</main>
+</div>
+
+
+<!-- NEW LOAD MODAL -->
+
+<div class="modal" id="loadModal">
+
+    <div class="modal-box">
+
+        <h2>Create New Load</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>ORIGIN</label>
+                <input id="origin" placeholder="Chicago, IL">
+            </div>
+
+            <div class="form-group">
+                <label>DESTINATION</label>
+                <input id="destination" placeholder="Dallas, TX">
+            </div>
+
+            <div class="form-group">
+                <label>CUSTOMER</label>
+                <select id="customer">
+                    <option>Walmart Logistics</option>
+                    <option>Amazon Freight</option>
+                    <option>Target Supply</option>
+                    <option>Home Depot</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>RATE</label>
+                <input id="rate" placeholder="$4,850">
+            </div>
+
+            <div class="form-group">
+                <label>PICKUP DATE</label>
+                <input type="date">
+            </div>
+
+            <div class="form-group">
+                <label>DELIVERY DATE</label>
+                <input type="date">
+            </div>
+
+            <div class="form-group full">
+                <label>NOTES</label>
+                <input placeholder="Additional load information">
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button class="btn btn-light" onclick="closeModal('loadModal')">
+                Cancel
+            </button>
+
+            <button class="btn btn-blue" onclick="createLoad()">
+                Create Load
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const titles={
+    dashboard:["Dashboard","Transportation Management System"],
+    dispatch:["Dispatch Board","Manage active loads and drivers"],
+    loads:["Load Management","All company freight loads"],
+    drivers:["Driver Management","Drivers, HOS and assignments"],
+    fleet:["Fleet Management","Trucks and equipment"],
+    customers:["Customers","Customer accounts and activity"],
+    finance:["Finance","Revenue, expenses and settlements"],
+    documents:["Documents & Compliance","Company and driver documents"],
+    reports:["Reports","Performance and operational analytics"]
+};
+
+
+function showPage(id,button){
+
+    document.querySelectorAll(".page").forEach(page=>{
+        page.classList.remove("active");
+    });
+
+    const page=document.getElementById(id);
+
+    if(page){
+        page.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav button").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    if(button){
+        button.classList.add("active");
+    }
+
+    document.getElementById("pageTitle").textContent=titles[id][0];
+    document.getElementById("pageSubtitle").textContent=titles[id][1];
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+function openModal(id){
+    document.getElementById(id).classList.add("show");
+}
+
+
+function closeModal(id){
+    document.getElementById(id).classList.remove("show");
+}
+
+
+window.onclick=function(e){
+
+    if(e.target.classList.contains("modal")){
+        e.target.classList.remove("show");
+    }
+
+};
+
+
+function searchTable(tableId,value){
+
+    const table=document.getElementById(tableId);
+
+    if(!table)return;
+
+    const rows=table.querySelectorAll("tbody tr");
+
+    value=value.toLowerCase();
+
+    rows.forEach(row=>{
+
+        const text=row.innerText.toLowerCase();
+
+        row.style.display=text.includes(value) ? "" : "none";
+
+    });
+}
+
+
+function globalSearch(value){
+
+    const activePage=document.querySelector(".page.active");
+
+    if(!activePage)return;
+
+    const table=activePage.querySelector("table");
+
+    if(table){
+
+        const rows=table.querySelectorAll("tbody tr");
+
+        value=value.toLowerCase();
+
+        rows.forEach(row=>{
+
+            row.style.display=
+                row.innerText.toLowerCase().includes(value)
+                ? ""
+                : "none";
+
+        });
+
+    }
+
+}
+
+
+function createLoad(){
+
+    const origin=document.getElementById("origin").value;
+    const destination=document.getElementById("destination").value;
+    const customer=document.getElementById("customer").value;
+    const rate=document.getElementById("rate").value;
+
+    if(!origin || !destination || !rate){
+
+        alert("Please fill in Origin, Destination and Rate.");
+        return;
+
+    }
+
+    const table=document.querySelector("#loadsTable tbody");
+
+    const number=Math.floor(10000+Math.random()*89999);
+
+    const row=table.insertRow();
+
+    row.innerHTML=`
+
+        <td class="load-id">NS-${number}</td>
+
+        <td>${origin}</td>
+
+        <td>${destination}</td>
+
+        <td>${customer}</td>
+
+        <td>—</td>
+
+        <td>${rate}</td>
+
+        <td>
+            <span class="status pending">
+                NEW
+            </span>
+        </td>
+
+    `;
+
+    closeModal("loadModal");
+
+    document.getElementById("origin").value="";
+    document.getElementById("destination").value="";
+    document.getElementById("rate").value="";
+
+    alert("Load NS-"+number+" created successfully.");
+
+}
+
+
+setInterval(()=>{
+
+    const bars=document.querySelectorAll(".bar");
+
+    bars.forEach(bar=>{
+
+        const current=parseInt(bar.style.height);
+
+        const variation=Math.floor(Math.random()*5)-2;
+
+        bar.style.height=Math.max(20,current+variation)+"%";
+
+    });
+
+},4000);
+
+</script>
+
+</body>
+</html>
